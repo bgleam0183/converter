@@ -36,7 +36,7 @@ function B() {
                 switch(element) {
                     case '<?php':
                       // dataArr[cnt].replaceAll('<?php', '<%');
-                      dataArr[cnt] = '<%@';
+                      dataArr[cnt] = '<%';
                       break;
 
                     case '?>':
