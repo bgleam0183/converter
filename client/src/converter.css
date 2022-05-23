@@ -36,7 +36,7 @@ textarea::placeholder {
     width: 40%;
     min-height: 500px;
     display: inline-block;
-    font-size: 2em;
+    /* font-size: 2em; */
 }
 
 .jspBox {
@@ -44,7 +44,7 @@ textarea::placeholder {
     min-height: 500px;
     margin-left: 40px;
     display: inline-block;
-    font-size: 2em;
+    /* font-size: 2em; */
 }
 
 .hi {

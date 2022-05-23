@@ -20,26 +20,69 @@ function B() {
       const onReset = () => {
         var newData = '';
         var isOpen = false;
+        var isIn = false;
         var isSpace = false;
         var spaceVal = 0;
+        var varTmp = [];
         const inData = inputs.inFoot;
         var dataArrA = inData.split("\n");
 
         dataArrA.forEach(data => {
+            data = data.replace("\t", "");
             var dataArr = data.split(" ");
-            let cnt = 0;
+            var cnt = 0;
 
             dataArr.forEach(element => {
                 switch(element) {
-                    case element === '<?php':
-                        dataArr[cnt].replace('<?php', '<%');
+                    case '<?php':
+                      // dataArr[cnt].replaceAll('<?php', '<%');
+                      dataArr[cnt] = '<%@';
+                      break;
+
+                    case '?>':
+                      dataArr[cnt] = '%>';
+                      break;
+
+                    case 'echo':
+                      dataArr[cnt] = 'console.log('
+                      isOpen = true;
+                      break;
+
+                    case 'include':
+                      dataArr[cnt] = '<%@ include';
+                      isIn = true;
+                      break;
+
+                    default:
+                      if(element[0] === '$') {
+                        var imsi1 = element.replace("$", "");
+
+                        imsi1 = imsi1.replace(";", "");
+                        imsi1 = imsi1.split("=");
+                        imsi1 = imsi1[0];
+
+                        if(varTmp.indexOf(imsi1) == -1) {
+                          dataArr[cnt] = dataArr[cnt].replace("$", "var ");
+                          varTmp.push(imsi1);
+                        } else {
+                          dataArr[cnt] = dataArr[cnt].replace("$", "");
+                        }
+                      } // if $ end
+                      if(element[element.length-1] === ';' && isOpen) {
+                        dataArr[cnt] = dataArr[cnt].replace(";", ");");
+                        isOpen = false;
+                      } else if (element[element.length-1] === ';' && isIn) {
+                        dataArr[cnt] = dataArr[cnt].replace(";", " %>");
+                        isIn = false;
+                      }
+                      break;
                 }
                 
                 cnt += 1;
             }); // dataArr.forEach End
 
             for(var i=0; i<dataArr.length; i++) {
-                if (dataArr[i] == 'console.log(') {
+                if (dataArr[i] === 'console.log(') {
                   isSpace = true;
                   spaceVal = i+1;
                 }
@@ -47,6 +90,8 @@ function B() {
                   newData += dataArr[i];
                 } else if(isSpace && i === spaceVal) {
                   newData += dataArr[i];
+                  isSpace = false;
+                  spaceVal = 0;
                 } else {
                   newData += " "+dataArr[i];
                 }
