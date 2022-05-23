@@ -1,0 +1,56 @@
+header {
+    /* width: 50%; */
+    margin: 0 auto;
+    text-align: center;
+    /* background-color: skyblue; */
+}
+
+.convertBlock {
+    background-color: gray;
+    margin: 0 auto;
+    /* width: 50%; */
+    text-align: center;
+    color: white;
+}
+
+.label {
+    display: inline-block;
+}
+
+#phpLabel {
+    /* background-color: aqua; */
+    width: 45%;
+}
+
+#jspLabel {
+    /* background-color: blueviolet; */
+    width: 45%;
+}
+
+textarea::placeholder {
+    text-align: center;
+    font-size: 2em;
+}
+
+.phpBox {
+    width: 40%;
+    min-height: 500px;
+    display: inline-block;
+    font-size: 2em;
+}
+
+.jspBox {
+    width: 40%;
+    min-height: 500px;
+    margin-left: 40px;
+    display: inline-block;
+    font-size: 2em;
+}
+
+.hi {
+    display: block;
+    margin: 0 auto;
+    width: 60px;
+    height: 30px;
+    margin-top: 40px;
+}

@@ -1,0 +1,49 @@
+.Box {
+    width: 70%;
+    text-align: center;
+    margin: 0 auto;
+}
+
+header {
+    background-color: black;
+    color: white;
+    padding: 30px;
+}
+
+.topNav {
+    background-color: bisque;
+}
+
+.topNav > div {
+    display: inline-block;
+}
+
+.nav1 {
+    background-color: pink;
+    font-size: 30px;
+    padding-left: 1em;
+    padding-right: 1em;
+}
+
+.nav2 {
+    background-color: skyblue;
+    font-size: 30px;
+    padding-left: 1em;
+    padding-right: 1em;
+}
+
+.nav3 {
+    background-color: lightgreen;
+    font-size: 30px;
+    padding-left: 1em;
+    padding-right: 1em;
+}
+
+a {
+    text-decoration: none;
+}
+
+.Content {
+    background-color: rgba(209, 209, 209, 0.753);
+    display: block;
+}

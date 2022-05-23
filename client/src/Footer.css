@@ -1,0 +1,27 @@
+footer {
+    background-color: rgb(81, 190, 163);
+}
+
+.leftFoot{
+    background-color: plum;
+    display: inline-block;
+    width: 30%;
+    
+}
+
+.centerFoot {
+    background-color: rgb(245, 120, 120);
+    display: inline-block;
+    width: 40%;
+}
+
+.rightFoot {
+    background-color: lightyellow;
+    display: inline-block;
+    width: 30%;
+}
+
+hr {
+    color: gray;
+    height: 2px;
+}
