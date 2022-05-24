@@ -29,49 +29,26 @@ function C() {
         
         var dataArrA = inData.split('\n');
 
-        dataArrA.forEach(piece => {
-          var dataArr = piece.split(' ');
+        dataArrA.forEach(line => {
+          var dataArr = line.split(' ');
           let j = 0;
+          var imsi = [];
 
-          dataArr.forEach(element => {
-              if(element[0] === '<') {
-                if(element === '<?php' || element === '<?') {
-                  dataArr[j] = '<%';
-                }
-              }
+          dataArr.forEach(words => {
+              words = words.replaceAll("$", " ");
+              words = words.replaceAll("(", " ");
+              words = words.replaceAll(")", " ");
+              words = words.replaceAll("\"", " ");
+              words = words.replaceAll("'", " ");
+              words = words.replaceAll("=", " ");
+              words = words.toString().split(' ');
+            
+              words.forEach(word => {
+                if(word != "") imsi.push(word);
+              })
+              console.log(imsi);
               
-              if (element[0] === '$') {
-                element = element.replace("$","");
-                dataArr[j] = element;
-              }
-
-              if (element[0] === '?') {
-                if (element === '?>') {
-                  dataArr[j] = '%>';
-                }
-              }
-
-              if (element === 'echo') {
-                dataArr[j] = 'console.log(';
-                isOpen = true;
-              }
-              
-              if (element[element.length-1] === '"' && isOpen) {
-                dataArr[j] = element + ')';
-                isOpen = false;
-              }
-              
-              if (element[element.length-1] === ';' && isOpen) {
-                element = element.substring(0,element.length-1)+');'.toString();
-                dataArr[j] = element;
-                isOpen = false;
-              } /* else if (element[element.length-1] != ';' && isOpen && element != 'echo') {
-                element = element.concat(");");
-                dataArr[j] = element;
-                isOpen = false;
-              } */ 
-              // 세미콜론 안하면 안 타는 로직인데 이걸 쓰면 해결은 되지만 다른 문제가 생겨서 제거
-              // ex_ echo hello >> console.log(hello  위 로직 쓰면 >> console.log(hello); 다른 구문 오류 발생
+              console.log(imsi.find(isIt));
               
               j += 1;
           });
@@ -114,6 +91,12 @@ function C() {
           </div>
         </div>
       );
+}
+
+function isIt(param) {
+  if(param === 'if') {
+    return true;
+  }
 }
 
 export default C;

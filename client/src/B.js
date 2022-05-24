@@ -18,24 +18,68 @@ function B() {
       };
     
       const onReset = () => {
-        var newData = '';
-        var isOpen = false;
-        var isIn = false;
+        var newData = '';     // 최종 JSP OUTPUT 박스에 표시될 내용을 담는 변수
+        var isOpen = false;   // 소괄호( '(' )가 열렸을 때 컨트롤
+        var isIn = false;     // include 문 변환 시 <%= 컨트롤을 위한 변수
         var isSpace = false;
         var spaceVal = 0;
         var varTmp = [];
         const inData = inputs.inFoot;
         var dataArrA = inData.split("\n");
+        var xCre = false;
+        var openCnt = 0;
+        var isOpenChg = false;
 
         dataArrA.forEach(data => {
             data = data.replace("\t", "");
-            var dataArr = data.split(" ");
+            data = data.replace("	", "");
+            data = data.replace("	", "");
+
             var cnt = 0;
+            if(data.match("{") && data.match("^foreach")) { openCnt = 1; isOpenChg = true; }
+            if(data.match("{") && !(data.match("^foreach"))) { openCnt += 1; }
+            if(data.match("}")) { openCnt -= 1; }
+
+            if(data.match("^foreach")) {
+              var forea = [];
+              data = data.replaceAll("(", " ");
+              data = data.replaceAll(")", " ");
+              data = data.replaceAll("$", " ");
+              var foreaTmp = data.split(" ");
+
+              foreaTmp.forEach(nd => {
+                if(nd != "") forea.push(nd);
+              })
+
+              var strForea = "";
+              strForea = strForea.concat(forea[(forea.length)-2].toString(), ".forEach(", forea[1].toString(), " => {");
+              data = strForea.toString();
+            }
+
+
+            var dataArr = data.split(" ");
+
+            console.log(openCnt);
+            if( openCnt == 0 && isOpenChg) {
+              dataArr[cnt] = "})";
+              openCnt = 0;
+              isOpenChg = false;
+            }
+            console.log(openCnt);
 
             dataArr.forEach(element => {
+              element = element.replace("!", "");
+              if(element.match("^echo")) {dataArr[cnt] = element.replaceAll("echo", "console.log");}
+              if(element.match("^if")) { dataArr[cnt] = element.replaceAll("$", "");}
+              
+              
                 switch(element) {
                     case '<?php':
-                      // dataArr[cnt].replaceAll('<?php', '<%');
+                      dataArr[cnt].replaceAll('<?php', '<%');
+                      dataArr[cnt] = '<%';
+                      break;
+
+                    case '<?':
                       dataArr[cnt] = '<%';
                       break;
 
@@ -53,6 +97,12 @@ function B() {
                       isIn = true;
                       break;
 
+                    case 'if(':
+                      xCre = true;
+                      break;
+                    
+                    
+
                     default:
                       if(element[0] === '$') {
                         var imsi1 = element.replace("$", "");
@@ -61,11 +111,13 @@ function B() {
                         imsi1 = imsi1.split("=");
                         imsi1 = imsi1[0];
 
-                        if(varTmp.indexOf(imsi1) == -1) {
+                        if(varTmp.indexOf(imsi1) == -1 && !xCre) {
                           dataArr[cnt] = dataArr[cnt].replace("$", "var ");
                           varTmp.push(imsi1);
                         } else {
                           dataArr[cnt] = dataArr[cnt].replace("$", "");
+                          varTmp.push(imsi1);
+                          xCre = false;
                         }
                       } // if $ end
                       if(element[element.length-1] === ';' && isOpen) {
@@ -99,6 +151,9 @@ function B() {
     
               newData += "\n";
         }); // dataArrA.forEach End
+
+        newData = newData.replaceAll("$", "");
+
         
         //outFoot 변환 값 셋팅
         setInputs({
@@ -114,9 +169,11 @@ function B() {
           <textarea name="inFoot" placeholder="php" onChange={onChange} value={inFoot} className="phpBox" />
           <textarea name="outFoot" placeholder="jsp" value={outFoot} readOnly={true} className="jspBox" />
           <button className="hi" onClick={onReset}>변환</button>
-          <div>
-            <b>값: </b>
-            {inFoot} ({outFoot})
+          <div style={{textAlign: "left", paddingLeft: "35px"}}>
+            <br/><br/><br/>
+            1. 모든 구문은 마지막에 세미콜론(;)을 찍어주어야 합니다.<br/>
+            2. 정확한 변환이 이루어지지 않았을 수 있으니 변환 후 확인바랍니다.<br/>
+            3. 장문의 코드 변환은 정확하지 못한 변환을 야기할 수 있으니 구간별로 구문을 잘라서 변환하는 것을 추천합니다.
           </div>
         </div>
       );
