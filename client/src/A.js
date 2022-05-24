@@ -1,4 +1,5 @@
 import { React, useState, useEffect, Component } from "react";
+import './converter.css'
 
 function A() {
 
@@ -13,7 +14,7 @@ function A() {
 
     var jsCode = "";
     
-    //php to jsp º¯È¯ ÀÌº¥Æ®
+    //php to jsp ï¿½ï¿½È¯ ï¿½Ìºï¿½Æ®
     function convert() {
         var gubun = "A";
         var code = document.getElementById("phpTxt").value;
@@ -24,19 +25,19 @@ function A() {
 
         if (gubun == "A") {
 
-            //¼±¾ðºÎ ¿µ¿ª
+            //ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             var dec = decConvert(code);
             code = "<%!" + "\n" + dec + "\n" + "%>";
             
         } else if (gubun == "B") {
 
-            //±¸ÇöºÎ ¿µ¿ª
+            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             var impl = implConvert(code);
             code = impl;
 
         } else {
 
-            //ºê¶ó¿ìÀú ¿µ¿ª
+            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             var browser = browConvert(code);
             code = browser;
 
@@ -48,7 +49,7 @@ function A() {
         code.replaceAll("__CA_SE__", "case");
         code.replaceAll("__ART__", "alert");
 
-        jsCode = code; //Å¬¸³º¸µå º¹»ç¸¦ À§ÇØ
+        jsCode = code; //Å¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ç¸¦ ï¿½ï¿½ï¿½ï¿½
 
         code = code.replaceAll("<", "&lt;");
 
@@ -56,7 +57,7 @@ function A() {
 
     }
 
-    //¼±¾ðºÎ º¯È¯
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
     function decConvert(code) {
         var arrCode = code.split("\n");
         
@@ -83,7 +84,7 @@ function A() {
         return result;
     }
 
-    //±¸ÇöºÎ º¯È¯
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
     function implConvert(code) {
         var arrCode = code.split("\n");
 
@@ -94,7 +95,7 @@ function A() {
                 break;
             }
 
-            //Å¸ÀÔº°·Î ÀÚ·áÇü ÁöÁ¤ÁÖµµ·Ï?
+            //Å¸ï¿½Ôºï¿½ï¿½ï¿½ ï¿½Ú·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½?
             if(arrCode[i].indexOf("$") != -1){
                 arrCode[i] = arrCode[i].replaceAll("$", "");
             }
@@ -115,7 +116,7 @@ function A() {
         return result;
     }
 
-    //ºê¶ó¿ìÀú ¿µ¿ª º¯È¯
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
     function browConvert(code) {
         var arrCode = code.split("\n");
 
@@ -179,7 +180,7 @@ function A() {
 
 
     return (
-        <div className="">
+        <div>
             <strong><label className="label" id="phpLabel">PHP INPUT</label></strong>
             <strong><label className="label" id="jspLabel">JSP OUTPUT</label></strong>
             <div className="centerContent">

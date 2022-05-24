@@ -1,8 +1,9 @@
 .Box {
     width: 70%;
-    text-align: center;
+    /* text-align: center; */
     margin: 0 auto;
 }
+
 
 header {
     background-color: black;
@@ -12,6 +13,7 @@ header {
 
 .topNav {
     background-color: bisque;
+    text-align: center;
 }
 
 .topNav > div {
