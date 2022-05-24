@@ -54,3 +54,69 @@ textarea::placeholder {
     height: 30px;
     margin-top: 40px;
 }
+
+pre {
+    margin: 0;
+}
+
+table {
+    width: 100%;
+}
+
+table td {
+    padding: 20px;
+}
+
+.centerContent {
+    margin-left: -3px;
+    width: 1200px;
+    padding: 10px;
+}
+
+.leftContent {
+    height: 600px;
+}
+
+.leftContent pre {
+    height: 600px;
+    width: 554px;
+    border: 1px solid #F74E4E;
+}
+
+.leftContent pre code {
+    height: 100%;
+    width: 100%;
+    border: 1px solid #6dff80;
+    display: block;
+}
+
+.leftContent textarea {
+    height: 600px;
+    width: 554px;
+    border: 1px solid blueviolet;
+    white-space: pre;
+}
+
+.rightContent pre {
+    height: 600px;
+    width: 554px;
+    border: 1px solid #F74E4E;
+}
+
+.rightContent pre code {
+    height: 600px;
+    width: 554px;
+    border: 1px solid #6dff80;
+    display: block;
+}
+
+.rightContent textarea {
+    height: 600px;
+    width: 554px; 
+    border: 1px solid blueviolet; 
+    white-space: pre;
+}
+
+.hidden {
+    display: none;
+}
