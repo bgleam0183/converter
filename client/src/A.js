@@ -1,12 +1,212 @@
-import React, { useState } from "react";
-
-
-
+import { React, useState, useEffect, Component } from "react";
 
 function A() {
-    return <div><h1>Aìž…ë‹ˆë‹¤.</h1></div>
+
+    useEffect(() => {
+        var phpCode = document.getElementById("phpTxt").value;
+        document.getElementById("phpPre").innerHTML = phpCode.replaceAll("<", "&lt;");
+        document.getElementById("phpPre").className = "";
+        return () => {
+          
+        };
+      }, []);
+
+    var jsCode = "";
+    
+    //php to jsp º¯È¯ ÀÌº¥Æ®
+    function convert() {
+        var gubun = "A";
+        var code = document.getElementById("phpTxt").value;
+
+        if (!code) {
+            return;
+        }
+
+        if (gubun == "A") {
+
+            //¼±¾ðºÎ ¿µ¿ª
+            var dec = decConvert(code);
+            code = "<%!" + "\n" + dec + "\n" + "%>";
+            
+        } else if (gubun == "B") {
+
+            //±¸ÇöºÎ ¿µ¿ª
+            var impl = implConvert(code);
+            code = impl;
+
+        } else {
+
+            //ºê¶ó¿ìÀú ¿µ¿ª
+            var browser = browConvert(code);
+            code = browser;
+
+        }
+
+        code.replaceAll("__AND__", "&");
+        code.replaceAll("__PLUS__", "\\+");
+        code.replaceAll("__QUESTION_MARK__", "\\?");
+        code.replaceAll("__CA_SE__", "case");
+        code.replaceAll("__ART__", "alert");
+
+        jsCode = code; //Å¬¸³º¸µå º¹»ç¸¦ À§ÇØ
+
+        code = code.replaceAll("<", "&lt;");
+
+        document.getElementById("jspPre").innerHTML = code;
+
+    }
+
+    //¼±¾ðºÎ º¯È¯
+    function decConvert(code) {
+        var arrCode = code.split("\n");
+        
+        for(var i=0; i<arrCode.length; i++){
+
+            if(arrCode[i].indexOf("include") != -1){
+                //<%@ include file="/WEB-INF/views/include/header.jsp" %>
+                arrCode[i] = arrCode[i].replaceAll("include", "<%@ include file=");
+                arrCode[i] = arrCode[i].replaceAll(";", "%>");
+
+            }
+
+            if(arrCode[i].indexOf("$") != -1){
+                arrCode[i] = arrCode[i].replaceAll("$", "var ");
+            }
+
+            if(arrCode[i].indexOf(".php") != -1){
+                arrCode[i] = arrCode[i].replaceAll(".php", ".jsp");
+            }
+        }
+
+        var result = arrCode.join("~");
+        result = result.replaceAll("~", "\n");
+        return result;
+    }
+
+    //±¸ÇöºÎ º¯È¯
+    function implConvert(code) {
+        var arrCode = code.split("\n");
+
+        for(var i=0; i<arrCode.length; i++){
+
+            if(arrCode[i].indexOf("<script>") != -1){
+                arrCode[i] = arrCode[i].replaceAll("<script>", "<script type=\"text/javascript\">");
+                break;
+            }
+
+            //Å¸ÀÔº°·Î ÀÚ·áÇü ÁöÁ¤ÁÖµµ·Ï?
+            if(arrCode[i].indexOf("$") != -1){
+                arrCode[i] = arrCode[i].replaceAll("$", "");
+            }
+
+            // Response.Write(" ");
+            if(arrCode[i].indexOf("echo") != -1){
+                arrCode[i] = arrCode[i].replaceAll("echo", "Response.Write");
+            }
+
+            if(arrCode[i].indexOf("exit") != -1){
+                arrCode[i] = arrCode[i].replaceAll("exit", "return");
+            }
+            
+        }
+
+        var result = arrCode.join("~");
+        result = result.replaceAll("~", "\n");
+        return result;
+    }
+
+    //ºê¶ó¿ìÀú ¿µ¿ª º¯È¯
+    function browConvert(code) {
+        var arrCode = code.split("\n");
+
+        for(var i=0; i<arrCode.length; i++){
+
+            if(arrCode[i].indexOf("$PHP_SELF") != -1){
+                arrCode[i] = arrCode[i].replaceAll("$PHP_SELF", "request.getRequestURL()");
+            }
+            
+        }
+
+        var result = arrCode.join("~");
+        result = result.replaceAll("~", "\n");
+
+        result = result.replaceAll("$", "");
+        result = result.replaceAll("<?", "<%");
+        result = result.replaceAll("?>", "%>");
+
+        return result;
+    }
+
+    function copy() {
+        navigator.clipboard.writeText(jsCode);
+        
+    }
+
+    function phpPreonClick() {
+        document.getElementById("phpPre").className = "hidden";
+        document.getElementById("phpTxt").className = "";
+        document.getElementById("phpTxt").focus(); 
+    }
+
+    function phpTxtonBlur() {
+        document.getElementById("phpPre").className = "";
+        document.getElementById("phpTxt").className = "hidden";
+        var phpCode = document.getElementById("phpTxt").value;
+        document.getElementById("phpPre").innerHTML = phpCode.replaceAll("<", "&lt;");
+    }
+
+    function phpTxtonKeyDown(e) {
+        if (e.keyCode === 9) { // tab was pressed
+            // get caret position/selection
+            var start = e.target.selectionStart;
+            var end = e.target.selectionEnd;
+    
+            var value = e.target.value;
+    
+            if (e.shiftKey) {
+                if (value.charAt(start - 1) == "\t") {
+                    e.target.value = (value.substring(0, start - 1) + value.substring(end));
+                    e.target.selectionStart = e.target.selectionEnd = start - 1;
+                }
+            } else {
+                e.target.value = (value.substring(0, start) + "\t" + value.substring(end));
+                e.target.selectionStart = e.target.selectionEnd = start + 1;
+            }
+            // prevent the focus lose
+            e.preventDefault();
+        }
+    }
+
+
+    return (
+        <div className="">
+            <strong><label className="label" id="phpLabel">PHP INPUT</label></strong>
+            <strong><label className="label" id="jspLabel">JSP OUTPUT</label></strong>
+            <div className="centerContent">
+                <table>
+                    <tbody>
+                        <tr>
+                        <td style={{width: '600px'}}>
+                            <div className="leftContent">
+                                <pre id="phpPre" onClick={phpPreonClick}><code id="phpCode"></code></pre><textarea className="hidden" id="phpTxt" onBlur={phpTxtonBlur} onKeyDown={e => phpTxtonKeyDown(e)}></textarea>
+                            </div>
+                        </td>
+                        <td style={{width: '50px'}}>
+                            <button id="convertButton" onClick={convert}> Convert </button>
+                            <button id="copyButton" onClick={copy}> Copy </button>
+                        </td>
+                        <td style={{width: '600px'}}>
+                            <div className="rightContent">
+                                <pre id="jspPre"><code id="jspCode"></code></pre><textarea className="hidden" id="jspTxt"></textarea>
+                            </div>
+                        </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            {/* <form enctype="application/x-www-form-urlencoded"></form> */}
+        </div>
+      );
 }
-
-
 
 export default A;
