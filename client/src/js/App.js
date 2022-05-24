@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Link } from 'react-router-dom';
-import './common_style.css';
+import '../css/common_style.css';
 import Body from './Body.js';
 import Footer from './Footer.js';
 

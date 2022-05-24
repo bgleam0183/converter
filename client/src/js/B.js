@@ -1,4 +1,5 @@
 import { React, useState } from "react";
+import '../css/converter.css'
 
 function B() {
     const [inputs, setInputs] = useState({

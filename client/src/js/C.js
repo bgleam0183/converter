@@ -1,6 +1,6 @@
 /* eslint-disable */
 import React, { Component, useState } from "react";
-import './converter.css'
+import '../css/converter.css'
 
 
 function C() {
