@@ -1,11 +1,11 @@
+/* eslint-disable */
 import { React, useState, useEffect, Component, Children } from "react";
 import '../css/converter.css'
 
 function A() {
-    /* var [resJson, setResJson] = useState({
-        response: '',
-        errMsg: ''
-    }) */
+    var [resJson, setResJson] = useState({
+        response: ''
+    })
 
     useEffect(() => {
         var phpCode = document.getElementById("phpTxt").value;
@@ -56,6 +56,13 @@ function A() {
         jsCode = code; //Ŭ������ ���縦 ����
 
         code = code.replaceAll("<", "&lt;");
+
+        var respon = conSelect();
+
+        
+
+        // code = code.concat(respon.stringfy());
+        
 
         document.getElementById("jspPre").innerHTML = code;
 
@@ -180,6 +187,24 @@ function A() {
             // prevent the focus lose
             e.preventDefault();
         }
+    }
+
+    async function conSelect() {
+        // e.preventDefault();
+
+        var response = await fetch('/asd', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        console.log("returned");
+        const body = await response.text();
+
+        console.log("############# Received Data #############");
+        console.log(body);
+
+        setResJson({ response: body });
     }
 
 
