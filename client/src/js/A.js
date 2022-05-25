@@ -18,7 +18,7 @@ function A() {
 
     var jsCode = "";
     
-    //php to jsp ��ȯ �̺�Ʈ
+   
     function convert() {
         var gubun = "A";
         var code = document.getElementById("phpTxt").value;
@@ -29,19 +29,19 @@ function A() {
 
         if (gubun == "A") {
 
-            //����� ����
+            
             var dec = decConvert(code);
             code = "<%!" + "\n" + dec + "\n" + "%>";
             
         } else if (gubun == "B") {
 
-            //������ ����
+            
             var impl = implConvert(code);
             code = impl;
 
         } else {
 
-            //������ ����
+            
             var browser = browConvert(code);
             code = browser;
 
@@ -53,7 +53,7 @@ function A() {
         code.replaceAll("__CA_SE__", "case");
         code.replaceAll("__ART__", "alert");
 
-        jsCode = code; //Ŭ������ ���縦 ����
+        jsCode = code; 
 
         code = code.replaceAll("<", "&lt;");
 
@@ -68,7 +68,7 @@ function A() {
 
     }
 
-    //����� ��ȯ
+    
     function decConvert(code) {
         var arrCode = code.split("\n");
         
@@ -95,7 +95,7 @@ function A() {
         return result;
     }
 
-    //������ ��ȯ
+    
     function implConvert(code) {
         var arrCode = code.split("\n");
 
@@ -106,7 +106,7 @@ function A() {
                 break;
             }
 
-            //Ÿ�Ժ��� �ڷ��� �����ֵ���?
+            
             if(arrCode[i].indexOf("$") != -1){
                 arrCode[i] = arrCode[i].replaceAll("$", "");
             }
@@ -127,7 +127,7 @@ function A() {
         return result;
     }
 
-    //������ ���� ��ȯ
+    
     function browConvert(code) {
         var arrCode = code.split("\n");
 
