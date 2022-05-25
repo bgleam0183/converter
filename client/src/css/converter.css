@@ -10,7 +10,7 @@ header {
     background-color: gray;
     margin: 0 auto;
     /* width: 50%; */
-    text-align: center;
+    /* text-align: center; */
     color: white;
     height: 100%;
 }
@@ -59,7 +59,7 @@ textarea::placeholder {
 }
 
 
-/* A ë…ë¦½ css */
+/* A ?…ë¦? css */
 .centerContent {
     /* margin-left: -3px; */
     width: 100%;
