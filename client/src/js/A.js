@@ -1,7 +1,11 @@
-import { React, useState, useEffect, Component } from "react";
+import { React, useState, useEffect, Component, Children } from "react";
 import '../css/converter.css'
 
 function A() {
+    /* var [resJson, setResJson] = useState({
+        response: '',
+        errMsg: ''
+    }) */
 
     useEffect(() => {
         var phpCode = document.getElementById("phpTxt").value;
