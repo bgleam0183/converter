@@ -180,23 +180,23 @@ function A() {
 
 
     return (
-        <div>
+        <div className="convertBlock">
             <strong><label className="label" id="phpLabel">PHP INPUT</label></strong>
             <strong><label className="label" id="jspLabel">JSP OUTPUT</label></strong>
             <div className="centerContent">
                 <table>
                     <tbody>
                         <tr>
-                        <td style={{width: '600px'}}>
+                        <td className="boxTd">
                             <div className="leftContent">
                                 <pre id="phpPre" onClick={phpPreonClick}><code id="phpCode"></code></pre><textarea className="hidden" id="phpTxt" onBlur={phpTxtonBlur} onKeyDown={e => phpTxtonKeyDown(e)}></textarea>
                             </div>
                         </td>
-                        <td style={{width: '50px'}}>
-                            <button id="convertButton" onClick={convert}> Convert </button>
-                            <button id="copyButton" onClick={copy}> Copy </button>
+                        <td className="btnTd">
+                            <button id="convertBtn" onClick={convert}> Convert </button>
+                            <button id="copyBtn" onClick={copy}> Copy </button>
                         </td>
-                        <td style={{width: '600px'}}>
+                        <td className="boxTd">
                             <div className="rightContent">
                                 <pre id="jspPre"><code id="jspCode"></code></pre><textarea className="hidden" id="jspTxt"></textarea>
                             </div>

@@ -2,6 +2,8 @@
     width: 70%;
     /* text-align: center; */
     margin: 0 auto;
+    height: inherit;
+    /* background-color: yellowgreen; */
 }
 
 
@@ -9,11 +11,15 @@ header {
     background-color: black;
     color: white;
     padding: 30px;
+    min-height: 80px;
+    height: 8%;
 }
 
 .topNav {
     background-color: bisque;
     text-align: center;
+    min-height: 40px;
+    height: 4%;
 }
 
 .topNav > div {
@@ -48,4 +54,9 @@ a {
 .Content {
     background-color: rgba(209, 209, 209, 0.753);
     display: block;
+    height: 74%;
+}
+
+Footer {
+    height: 5%;
 }

@@ -1,3 +1,4 @@
+/* 공통 + B + C */
 header {
     /* width: 50%; */
     margin: 0 auto;
@@ -11,20 +12,22 @@ header {
     /* width: 50%; */
     text-align: center;
     color: white;
+    height: 100%;
 }
 
 .label {
     display: inline-block;
+    text-align: center;
 }
 
 #phpLabel {
     /* background-color: aqua; */
-    width: 45%;
+    width: 50%;
 }
 
 #jspLabel {
     /* background-color: blueviolet; */
-    width: 45%;
+    width: 50%;
 }
 
 textarea::placeholder {
@@ -55,67 +58,97 @@ textarea::placeholder {
     margin-top: 40px;
 }
 
-pre {
-    margin: 0;
-    overflow: auto;
+
+/* A 독립 css */
+.centerContent {
+    /* margin-left: -3px; */
+    width: 100%;
+    /* padding: 10px; */
+    height: 100%;
+    /* background-color: black; */
 }
 
 table {
-    width: 100%;
-}
-
-table td {
-    padding: 20px;
-}
-
-.centerContent {
-    margin-left: -3px;
-    width: 1200px;
-    padding: 10px;
+    /* width: 100%; */
+    height: 100%;
+    /* background-color: lightblue; */
 }
 
 .leftContent {
-    height: 600px;
+    height: 100%;
 }
 
-.leftContent pre {
-    height: 600px;
-    width: 554px;
+.rightContent {
+    height: 100%;
+}
+
+#phpPre {
+    margin: 0;
+    overflow: auto;
+    min-height: 100px;
+    /* height: 600px; */
+    /* width: 554px; */
+    height: 100%;
     border: 1px solid #F74E4E;
 }
 
-.leftContent pre code {
+#phpCode {
     height: 100%;
-    width: 100%;
+    width: 46%;
     border: 1px solid #6dff80;
     display: block;
 }
 
-.leftContent textarea {
-    height: 600px;
-    width: 554px;
+#phpTxt {
+    height: 100%;
+    /* width: 554px; */
+    width: 100%;
     border: 1px solid blueviolet;
     white-space: pre;
 }
 
-.rightContent pre {
-    height: 600px;
-    width: 554px;
+#convertBtn {
+    width: 100%;
+}
+
+#copyBtn {
+    width: 100%;
+}
+
+#jspPre {
+    margin: 0;
+    overflow: auto;
+    min-height: 100px;
+    height: 100%;
+    /* width: 554px; */
     border: 1px solid #F74E4E;
 }
 
-.rightContent pre code {
-    height: 600px;
-    width: 554px;
+#jspCode {
+    height: 100%;
+    min-height: 100px;
+    /* width: 554px; */
     border: 1px solid #6dff80;
     display: block;
 }
 
-.rightContent textarea {
-    height: 600px;
-    width: 554px; 
+#jspTxt {
+    height: 100%;
+    /* width: 554px;  */
+    width: 100%;
     border: 1px solid blueviolet; 
     white-space: pre;
+}
+
+.boxTd {
+    width: 46%;
+    padding: 20px;
+    padding-bottom: 40px;
+}
+
+.btnTd {
+    width: 8%;
+    padding: 20px;
 }
 
 .hidden {
