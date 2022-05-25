@@ -4,7 +4,8 @@ import '../css/converter.css'
 
 function A() {
     var [resJson, setResJson] = useState({
-        response: ''
+        response: '',
+        input: '',
     })
 
     useEffect(() => {
@@ -56,8 +57,8 @@ function A() {
         jsCode = code; 
 
         code = code.replaceAll("<", "&lt;");
-
-        var respon = conSelect();
+        
+        conSelect();
 
         
 
@@ -189,22 +190,43 @@ function A() {
         }
     }
 
-    async function conSelect() {
-        // e.preventDefault();
 
-        var response = await fetch('/asd', {
-            method: 'GET',
+    /**
+     * conSelect means 'connect Select' >> communicate with nodejs server
+     * 
+     * when this function activated then NodeJS > express module gets
+     * with the method and parameter.
+     * 
+     * and then express responsed then control the responed data
+     *  */
+    async function conSelect() {
+        var inputCode = document.getElementById("phpTxt").value;
+
+        setResJson({
+            ...resJson,
+            input: inputCode
+        })
+
+        const response = await fetch('/asd', {
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
+            body: JSON.stringify({ 
+                input: inputCode
+            })
         });
-        console.log("returned");
+
+
         const body = await response.text();
 
-        console.log("############# Received Data #############");
-        console.log(body);
+        setResJson({ 
+            ...resJson,
+            response: JSON.parse(body)
+        });
 
-        setResJson({ response: body });
+        console.log(resJson.response+" /// "+resJson.input);
+        console.log(resJson.response.M_NAME);
     }
 
 
