@@ -27,13 +27,15 @@ async function oraSelect(req, res) {
 
         var result = await connection.execute(`SELECT * FROM TB_MAPPING WHERE 1=1 AND GUBUN = 'PHP' AND ASIS_ID = :asis`, [`${req.body.input}`]);
 
-        console.log("\n\n################# express Execute Value #################\n");
+        console.log("\n\n## server.js > oraSelect\n################# express Execute Value #################\n");
         console.log(result);
         console.log("\n\n############## express Value Transfer Ended ##############\n")
 
-        
-
-        res.send(result.rows);
+        if( result.rows.length == 1 ) {
+            res.send(result.rows);
+        } else {
+            res.send([{TOBE_ID: "error_occured. Too many records loaded."}]);
+        }
     } catch (err) {
         console.log(err);
     } finally {
