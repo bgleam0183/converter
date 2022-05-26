@@ -5,7 +5,7 @@ import '../css/converter.css'
 function A() {
     var [resJson, setResJson] = useState({
         response: '',
-        input: '',
+        input: ''
     })
 
     useEffect(() => {
@@ -20,7 +20,7 @@ function A() {
     var jsCode = "";
     
    
-    function convert() {
+    async function convert() {
         var gubun = "A";
         var code = document.getElementById("phpTxt").value;
 
@@ -31,19 +31,23 @@ function A() {
         if (gubun == "A") {
 
             
-            var dec = decConvert(code);
-            code = "<%!" + "\n" + dec + "\n" + "%>";
+            /* var dec = decConvert(code); //declare
+            code = "<%!" + "\n" + dec + "\n" + "%>"; */
+            await decConvert(code)
+            .then(dec => {
+                code = "<%!" + "\n" + dec + "\n" + "%>";
+            }).catch(err => console.log(err));
             
         } else if (gubun == "B") {
 
             
-            var impl = implConvert(code);
+            var impl = implConvert(code);   //making
             code = impl;
 
         } else {
 
             
-            var browser = browConvert(code);
+            var browser = browConvert(code);    //browser
             code = browser;
 
         }
@@ -57,29 +61,45 @@ function A() {
         jsCode = code; 
 
         code = code.replaceAll("<", "&lt;");
-        
-        conSelect();
-
-        
-
-        // code = code.concat(respon.stringfy());
-        
-
         document.getElementById("jspPre").innerHTML = code;
-
     }
 
     
-    function decConvert(code) {
+    async function decConvert(code) {
         var arrCode = code.split("\n");
         
         for(var i=0; i<arrCode.length; i++){
+            var respond = '';   // result of Query
+            var param1 = '';    // parameter variable
 
             if(arrCode[i].indexOf("include") != -1){
                 //<%@ include file="/WEB-INF/views/include/header.jsp" %>
-                arrCode[i] = arrCode[i].replaceAll("include", "<%@ include file=");
-                arrCode[i] = arrCode[i].replaceAll(";", "%>");
+                try {
+                    respond = await conSelect('include');
+                    
+                    respond = respond[0].TOBE_ID;
+                    // respond = respond.toString();
+                    var arrCodeArr = arrCode[i].split("\"");
+                    param1 = arrCodeArr[1];
 
+                    arrCode[i] = respond.replaceAll("{param1}", param1);
+
+                    console.log("## decConvert > include > respond\n"+arrCode[i]);
+
+                    // Ver.02
+                    /* result = resJson.response[0].TOBE_ID;
+                    var arrCodeArr = arrCode[i].split("\"");
+                    param1 = arrCodeArr[1];
+                    
+                    arrCode[i] = result.replaceAll("{param1}", param1);
+                    console.log("## decConvert > include > result\n"+result); */
+
+                    // Original Ver.01
+                    /* arrCode[i] = arrCode[i].replaceAll("include", "<%@ include file=");
+                    arrCode[i] = arrCode[i].replaceAll(";", "%>"); */
+                } catch(err) {
+                    console.log(err);
+                }
             }
 
             if(arrCode[i].indexOf("$") != -1){
@@ -199,8 +219,9 @@ function A() {
      * 
      * and then express responsed then control the responed data
      *  */
-    async function conSelect() {
-        var inputCode = document.getElementById("phpTxt").value;
+    async function conSelect(param) {
+        // var inputCode = document.getElementById("phpTxt").value;
+        var inputCode = param;
 
         setResJson({
             ...resJson,
@@ -219,21 +240,16 @@ function A() {
 
         const body = await response.text();
 
-        console.log(body);
+        console.log("## conSelect > body\n"+body);
 
         setResJson({ 
             ...resJson,
             response: JSON.parse(body)
         });
 
-        console.log(resJson.response+" /// "+resJson.input);
         
-        // var response1 = JSON.parse(resJson.response[0]);
-        // var response2 = JSON.parse(resJSON.response[1]);
-        console.log("################# PARTITION #################");
-        // console.log(response1);
-        // console.log(response2);
-        console.log(resJson.response[0].ASIS_ID);
+        console.log("## conSelect > resJson.response/input\n"+resJson.response+" /// "+resJson.input);
+        return JSON.parse(body);
     }
 
 

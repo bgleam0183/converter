@@ -21,12 +21,14 @@ async function oraSelect(req, res) {
     try {
         connection = await db.getConnection(dbInfo);
 
-        console.log(`express received Data : ${req.body.input}`);
+        console.log(`## received Data\n${req.body.input}`);
 
-        var result = await connection.execute(`SELECT * FROM TB_MAPPING WHERE 1=1 AND GUBUN = '${req.body.input}'`, []);
+        console.log("## execute Query\n"+ `SELECT * FROM TB_MAPPING WHERE 1=1 AND GUBUN = 'PHP' AND ASIS_ID = '${req.body.input}'`);
+
+        var result = await connection.execute(`SELECT * FROM TB_MAPPING WHERE 1=1 AND GUBUN = 'PHP' AND ASIS_ID = :asis`, [`${req.body.input}`]);
 
         console.log("\n\n################# express Execute Value #################\n");
-        console.log(result.rows);
+        console.log(result);
         console.log("\n\n############## express Value Transfer Ended ##############\n")
 
         
