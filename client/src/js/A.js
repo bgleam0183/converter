@@ -217,8 +217,9 @@ function A() {
             })
         });
 
-
         const body = await response.text();
+
+        console.log(body);
 
         setResJson({ 
             ...resJson,
@@ -226,7 +227,13 @@ function A() {
         });
 
         console.log(resJson.response+" /// "+resJson.input);
-        console.log(resJson.response.M_NAME);
+        
+        // var response1 = JSON.parse(resJson.response[0]);
+        // var response2 = JSON.parse(resJSON.response[1]);
+        console.log("################# PARTITION #################");
+        // console.log(response1);
+        // console.log(response2);
+        console.log(resJson.response[0].ASIS_ID);
     }
 
 
