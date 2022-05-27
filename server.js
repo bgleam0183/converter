@@ -30,9 +30,11 @@ async function oraSelect(req, res) {
         console.log(result.rows);
         console.log("\n\n############## express Value Transfer Ended ##############\n")
 
-        
-
-        res.send(result.rows);
+        if( result.rows.length == 1 ) {
+            res.send(result.rows);
+        } else {
+            res.send([{TOBE_ID: "error_occured. Too many records loaded."}]);
+        }
     } catch (err) {
         console.log(err);
     }
