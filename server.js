@@ -35,12 +35,6 @@ async function oraSelect(req, res) {
         res.send(result.rows);
     } catch (err) {
         console.log(err);
-    } finally {
-        try {
-            await connection.close();
-        } catch (err) {
-            console.log(err);
-        }
     }
 }
 
