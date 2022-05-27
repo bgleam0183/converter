@@ -107,13 +107,8 @@ table {
     white-space: pre;
 }
 
-#dbConBtn {
+#dbCon {
     width: 100%;
-}
-
-#dbDconBtn {
-    width: 100%;
-    margin-bottom: 30px;
 }
 
 #convertBtn {

@@ -4,6 +4,7 @@ const { urlencoded } = require('body-parser');
 const path           = require('path');
 const db             = require('oracledb');
 const dbInfo         = require('./dbinfo.js');
+var   connection;
 
 // test
 var connection;
@@ -84,6 +85,38 @@ app.post("/dc", (req, res) => {
     oraDisConnect(req, res);
 })
 
+
+async function oraConnect(req, res) {
+    try {
+        connection = await db.getConnection(dbInfo);
+        res.send('DB Connected');
+        console.log('DB Connected');
+    } catch (err) {
+        console.log(err);
+        res.send(err);
+    }
+}
+
+async function oraDisconnect(req, res) {
+    try {
+        // this Method Occured error.
+        // connection.close();
+        res.send('DB Disconnected');
+        console.log('DB Disconnected');
+    } catch (err) {
+        console.log(err);
+        res.send(err);
+    }
+}
+
+
+app.post("/dbCon", (req, res) => {
+    oraConnect(req, res);
+});
+
+app.post("/dbDis", (req, res) => {
+    oraDisconnect(req, res);
+})
 
 app.post("/asd", (req, res) => {
     oraSelect(req, res);

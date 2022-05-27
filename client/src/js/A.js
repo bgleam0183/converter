@@ -1,4 +1,5 @@
 /* eslint-disable */
+// aaaaaaaaaaaaaaaa
 import { React, useState, useEffect, Component, Children } from "react";
 import '../css/converter.css'
 
@@ -76,28 +77,14 @@ function A() {
                 //<%@ include file="/WEB-INF/views/include/header.jsp" %>
                 try {
                     respond = await conSelect('include');
-                    
+
                     respond = respond[0].TOBE_ID;
-                    // respond = respond.toString();
+
                     var arrCodeArr = arrCode[i].split("\"");
                     param1 = arrCodeArr[1];
 
                     arrCode[i] = respond.replaceAll("{param1}", param1);
-
-                    console.log("## decConvert > include > respond\n"+arrCode[i]);
-
-                    // Ver.02
-                    /* result = resJson.response[0].TOBE_ID;
-                    var arrCodeArr = arrCode[i].split("\"");
-                    param1 = arrCodeArr[1];
-                    
-                    arrCode[i] = result.replaceAll("{param1}", param1);
-                    console.log("## decConvert > include > result\n"+result); */
-
-                    // Original Ver.01
-                    /* arrCode[i] = arrCode[i].replaceAll("include", "<%@ include file=");
-                    arrCode[i] = arrCode[i].replaceAll(";", "%>"); */
-                } catch(err) {
+                } catch (err) {
                     console.log(err);
                 }
             }
@@ -220,12 +207,11 @@ function A() {
      * and then express responsed then control the responed data
      *  */
     async function conSelect(param) {
-        // var inputCode = document.getElementById("phpTxt").value;
-        var inputCode = param;
+        var inputVal = param;
 
         setResJson({
             ...resJson,
-            input: inputCode
+            input: inputVal
         })
 
         const response = await fetch('/asd', {
@@ -234,21 +220,40 @@ function A() {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({ 
-                input: inputCode
+                input: inputVal
             })
         });
 
         const body = await response.text();
-
-        console.log("## conSelect > body\n"+body);
 
         setResJson({ 
             ...resJson,
             response: JSON.parse(body)
         });
 
-        
         return JSON.parse(body);
+    }
+
+    async function conCon() {
+        const response = await fetch('/dbCon', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        await response.text().then(ans => console.log(ans)).catch(err => console.log(err));
+    }
+
+    async function conDis() {
+        const response = await fetch('/dbDis', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        await response.text().then(ans => console.log(ans)).catch(err => console.log(err));
     }
 
     /**
@@ -295,8 +300,8 @@ function A() {
                             </div>
                         </td>
                         <td className="btnTd">
-                            <button id="dbConBtn" onClick={conConnect}> DB Connect </button>
-                            <button id="dbDconBtn" onClick={conDisConnect}> DB Disconnect </button>
+                            <button id="dbCon" onClick={conCon}> Connect </button>
+                            {/* <button id="dbDis" onClick={conDis}> Disconnect </button> */}
                             <button id="convertBtn" onClick={convert}> Convert </button>
                             <button id="copyBtn" onClick={copy}> Copy </button>
                         </td>
