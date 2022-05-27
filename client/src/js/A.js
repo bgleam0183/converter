@@ -21,7 +21,7 @@ function A() {
     var jsCode = "";
     
    
-    function convert() {
+    async function convert() {
         var gubun = "A";
         var code = document.getElementById("phpTxt").value;
 
@@ -32,8 +32,10 @@ function A() {
         if (gubun == "A") {
 
             
-            var dec = decConvert(code);
-            code = "<%!" + "\n" + dec + "\n" + "%>";
+            await decConvert(code).then(dec => {
+                code = "<%!" + "\n" + dec + "\n" + "%>";
+            }).catch(err => console.log(err));
+            // code = "<%!" + "\n" + dec + "\n" + "%>";
             
         } else if (gubun == "B") {
 
@@ -59,8 +61,6 @@ function A() {
 
         code = code.replaceAll("<", "&lt;");
         
-        conSelect();
-
         
 
         // code = code.concat(respon.stringfy());
@@ -71,16 +71,27 @@ function A() {
     }
 
     
-    function decConvert(code) {
+    async function decConvert(code) {
         var arrCode = code.split("\n");
         
         for(var i=0; i<arrCode.length; i++){
+            var respond = '';
+            var param1 = '';
 
             if(arrCode[i].indexOf("include") != -1){
                 //<%@ include file="/WEB-INF/views/include/header.jsp" %>
-                arrCode[i] = arrCode[i].replaceAll("include", "<%@ include file=");
-                arrCode[i] = arrCode[i].replaceAll(";", "%>");
+                try {
+                    respond = await conSelect('include');
 
+                    respond = respond[0].TOBE_ID;
+
+                    var arrCodeArr = arrCode[i].split("\"");
+                    param1 = arrCodeArr[1];
+
+                    arrCode[i] = respond.replaceAll("{param1}", param1);
+                } catch (err) {
+                    console.log(err);
+                }
             }
 
             if(arrCode[i].indexOf("$") != -1){
@@ -200,12 +211,12 @@ function A() {
      * 
      * and then express responsed then control the responed data
      *  */
-    async function conSelect() {
-        var inputCode = document.getElementById("phpTxt").value;
+    async function conSelect(param) {
+        var inputVal = param;
 
         setResJson({
             ...resJson,
-            input: inputCode
+            input: inputVal
         })
 
         const response = await fetch('/asd', {
@@ -214,27 +225,40 @@ function A() {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({ 
-                input: inputCode
+                input: inputVal
             })
         });
 
         const body = await response.text();
-
-        console.log(body);
 
         setResJson({ 
             ...resJson,
             response: JSON.parse(body)
         });
 
-        console.log(resJson.response+" /// "+resJson.input);
-        
-        // var response1 = JSON.parse(resJson.response[0]);
-        // var response2 = JSON.parse(resJSON.response[1]);
-        console.log("################# PARTITION #################");
-        // console.log(response1);
-        // console.log(response2);
-        console.log(resJson.response[0].ASIS_ID);
+        return JSON.parse(body);
+    }
+
+    async function conCon() {
+        const response = await fetch('/dbCon', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        await response.text().then(ans => console.log(ans)).catch(err => console.log(err));
+    }
+
+    async function conDis() {
+        const response = await fetch('/dbDis', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        await response.text().then(ans => console.log(ans)).catch(err => console.log(err));
     }
 
 
@@ -252,6 +276,8 @@ function A() {
                             </div>
                         </td>
                         <td className="btnTd">
+                            <button id="dbCon" onClick={conCon}> Connect </button>
+                            {/* <button id="dbDis" onClick={conDis}> Disconnect </button> */}
                             <button id="convertBtn" onClick={convert}> Convert </button>
                             <button id="copyBtn" onClick={copy}> Copy </button>
                         </td>

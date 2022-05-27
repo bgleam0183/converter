@@ -59,7 +59,7 @@ textarea::placeholder {
 }
 
 
-/* A ?…ë¦? css */
+/* A ?ï¿½ï¿½ï¿½? css */
 .centerContent {
     /* margin-left: -3px; */
     width: 100%;
@@ -105,6 +105,10 @@ table {
     width: 100%;
     border: 1px solid blueviolet;
     white-space: pre;
+}
+
+#dbCon {
+    width: 100%;
 }
 
 #convertBtn {
