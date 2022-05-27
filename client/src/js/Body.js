@@ -7,7 +7,7 @@ function Body() {
     return (
         <>
             <Routes>
-                {/* <Route path="/" element={}></Route> */}
+                {/* <Route path="/" element={''}></Route> */}
                 <Route path="/a" element={<A />}></Route>
                 <Route path="/b" element={<B />}></Route>
                 <Route path="/c" element={<C />}></Route>

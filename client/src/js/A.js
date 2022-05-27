@@ -6,7 +6,7 @@ import '../css/converter.css'
 function A() {
     var [resJson, setResJson] = useState({
         response: '',
-        input: '',
+        input: ''
     })
 
     useEffect(() => {
@@ -32,21 +32,23 @@ function A() {
         if (gubun == "A") {
 
             
-            await decConvert(code).then(dec => {
+            /* var dec = decConvert(code); //declare
+            code = "<%!" + "\n" + dec + "\n" + "%>"; */
+            await decConvert(code)
+            .then(dec => {
                 code = "<%!" + "\n" + dec + "\n" + "%>";
             }).catch(err => console.log(err));
-            // code = "<%!" + "\n" + dec + "\n" + "%>";
             
         } else if (gubun == "B") {
 
             
-            var impl = implConvert(code);
+            var impl = implConvert(code);   //making
             code = impl;
 
         } else {
 
             
-            var browser = browConvert(code);
+            var browser = browConvert(code);    //browser
             code = browser;
 
         }
@@ -60,14 +62,7 @@ function A() {
         jsCode = code; 
 
         code = code.replaceAll("<", "&lt;");
-        
-        
-
-        // code = code.concat(respon.stringfy());
-        
-
         document.getElementById("jspPre").innerHTML = code;
-
     }
 
     
@@ -75,8 +70,8 @@ function A() {
         var arrCode = code.split("\n");
         
         for(var i=0; i<arrCode.length; i++){
-            var respond = '';
-            var param1 = '';
+            var respond = '';   // result of Query
+            var param1 = '';    // parameter variable
 
             if(arrCode[i].indexOf("include") != -1){
                 //<%@ include file="/WEB-INF/views/include/header.jsp" %>
@@ -261,6 +256,35 @@ function A() {
         await response.text().then(ans => console.log(ans)).catch(err => console.log(err));
     }
 
+    /**
+     * conConnect means 'connect Connection
+     * it activate the DB Connection
+     */
+     async function conConnect() {
+        console.log("conConnect Method is Working...");
+        const result = await fetch('/c', {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+    
+        const body = await result.text();
+        console.log(body);
+      }
+
+      async function conDisConnect() {
+        console.log("conDisConnect Method is Working...");
+          const result = await fetch("/dc", {
+              method: "POST",
+              headers: {
+                  "Content-Type": "application/json",
+              },
+          });
+
+          const body = await result.text();
+          console.log(body);
+      }
 
     return (
         <div className="convertBlock">
