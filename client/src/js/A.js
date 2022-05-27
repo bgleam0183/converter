@@ -251,6 +251,35 @@ function A() {
         return JSON.parse(body);
     }
 
+    /**
+     * conConnect means 'connect Connection
+     * it activate the DB Connection
+     */
+     async function conConnect() {
+        console.log("conConnect Method is Working...");
+        const result = await fetch('/c', {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+    
+        const body = await result.text();
+        console.log(body);
+      }
+
+      async function conDisConnect() {
+        console.log("conDisConnect Method is Working...");
+          const result = await fetch("/dc", {
+              method: "POST",
+              headers: {
+                  "Content-Type": "application/json",
+              },
+          });
+
+          const body = await result.text();
+          console.log(body);
+      }
 
     return (
         <div className="convertBlock">
@@ -266,6 +295,8 @@ function A() {
                             </div>
                         </td>
                         <td className="btnTd">
+                            <button id="dbConBtn" onClick={conConnect}> DB Connect </button>
+                            <button id="dbDconBtn" onClick={conDisConnect}> DB Disconnect </button>
                             <button id="convertBtn" onClick={convert}> Convert </button>
                             <button id="copyBtn" onClick={copy}> Copy </button>
                         </td>

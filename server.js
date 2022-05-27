@@ -19,9 +19,27 @@ app.use(bodyParser.urlencoded({ extended: true }));
 db.outFormat    = db.OUT_FORMAT_OBJECT;
 db.autoCommit   = true;
 
-async function oraConnect() {
-    connection = await db.getConnection(dbInfo);
+async function oraConnect(req, res) {
+    try {
+        connection = await db.getConnection(dbInfo);
+    } catch (err) {
+        console.log("DB Connect Fail");
+        res.send(err);
+    }
+    
     console.log("db Connected")
+    res.send("DB is Now Connected");
+}
+
+async function oraDisConnect(req, res) {
+    try {
+        connection.close();
+    } catch (err) {
+        console.log(err);
+        res.send(err);
+    }
+    console.log("db Disconnected");
+    res.send("DB is Now Disconnected");
 }
 
 async function oraSelect(req, res) {
@@ -56,10 +74,15 @@ async function oraSelect(req, res) {
     } */
 }
 
-app.post("/", (req, res) => {
-    console.log("Reached");
-    oraConnect();
+app.post("/c", (req, res) => {
+    console.log("Reached to Connect Activation");
+    oraConnect(req, res);
 });
+
+app.post("/dc", (req, res) => {
+    console.log("Reached to Disconnect Activation");
+    oraDisConnect(req, res);
+})
 
 
 app.post("/asd", (req, res) => {
