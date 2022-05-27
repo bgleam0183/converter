@@ -5,6 +5,10 @@ const path           = require('path');
 const db             = require('oracledb');
 const dbInfo         = require('./dbinfo.js');
 
+// test
+var connection;
+// connection = db.getConnection(dbInfo);
+
 const app = express();
 const port = 5000;
 
@@ -15,11 +19,16 @@ app.use(bodyParser.urlencoded({ extended: true }));
 db.outFormat    = db.OUT_FORMAT_OBJECT;
 db.autoCommit   = true;
 
+async function oraConnect() {
+    connection = await db.getConnection(dbInfo);
+    console.log("db Connected")
+}
+
 async function oraSelect(req, res) {
-    let connection;
+    // let connection;
 
     try {
-        connection = await db.getConnection(dbInfo);
+        // connection = await db.getConnection(dbInfo);
 
         console.log(`## received Data\n${req.body.input}`);
 
@@ -38,14 +47,19 @@ async function oraSelect(req, res) {
         }
     } catch (err) {
         console.log(err);
-    } finally {
+    } /* finally {
         try {
             await connection.close();
         } catch (err) {
             console.log(err);
         }
-    }
+    } */
 }
+
+app.post("/", (req, res) => {
+    console.log("Reached");
+    oraConnect();
+});
 
 
 app.post("/asd", (req, res) => {

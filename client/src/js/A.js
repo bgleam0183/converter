@@ -248,7 +248,6 @@ function A() {
         });
 
         
-        console.log("## conSelect > resJson.response/input\n"+resJson.response+" /// "+resJson.input);
         return JSON.parse(body);
     }
 
