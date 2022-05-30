@@ -51,15 +51,16 @@ async function oraSelect(req, res) {
 
         console.log(`## received Data\n${req.body.input}`);
 
-        console.log("## execute Query\n"+ `SELECT * FROM TB_MAPPING WHERE 1=1 AND GUBUN = 'PHP' AND ASIS_ID = '${req.body.input}'`);
+        console.log("## execute Query\n"+ `SELECT * FROM TB_PHP`);
 
-        var result = await connection.execute(`SELECT * FROM TB_MAPPING WHERE 1=1 AND GUBUN = 'PHP' AND ASIS_ID = :asis`, [`${req.body.input}`]);
+        // var result = await connection.execute(`SELECT * FROM TB_PHP WHERE 1=1 AND STRUC = :asis`, [`${req.body.input}`]);
+        var result = await connection.execute(`SELECT A.NO AS NO_PHP, A.STRUC AS STRUC_PHP, B.NO AS NO_JSP, B.STRUC AS STRUC_JSP FROM TB_PHP A, TB_JSP B WHERE 1=1 AND A.NO = B.NO`);
 
         console.log("\n\n## server.js > oraSelect\n################# express Execute Value #################\n");
         console.log(result);
         console.log("\n\n############## express Value Transfer Ended ##############\n")
 
-        if( result.rows.length == 1 ) {
+        if( true ) {
             res.send(result.rows);
         } else {
             res.send([{TOBE_ID: "error_occured. Too many records loaded."}]);
