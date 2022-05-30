@@ -68,8 +68,39 @@ function A() {
     
     async function decConvert(code) {
         var arrCode = code.split("\n");
+
+        var response = await conSelect('');
+
+        for(var i=0; i < arrCode.length; i++){
+
+            if(arrCode[i].indexOf("include") != -1){
+                var start = arrCode[i].indexOf("include");
+                var paramS = arrCode[i].indexOf("\"", start) + 1;
+                var paramE = arrCode[i].indexOf("\"", paramS+1);
+                var param = arrCode[i].slice(paramS, paramE);
+                
+                arrCode[i] = arrCode[i].replaceAll(param, "");
+                arrCode[i] = arrCode[i].replaceAll("\"", "");
+                arrCode[i] = arrCode[i].replaceAll(");", "");
+
+                for(var j=0; j < response.length; j++){
+                    if(response[j].STRUC_PHP.indexOf("include_once") != -1){
+
+                        var replace = response[j].STRUC_JSP;
+                        replace = replace.replaceAll("{param1}", param);
+                        arrCode[i] = replace.replaceAll("{param2}", "true");
+
+                    } else if (response[j].STRUC_PHP.indexOf("include") != -1){
+
+                        var replace = response[j].STRUC_JSP;
+                        arrCode[i] = replace.replaceAll("{param1}", param);
+
+                    }
+                }
+            }
+        }
         
-        for(var i=0; i<arrCode.length; i++){
+        /*for(var i=0; i<arrCode.length; i++){
             var respond = '';   // result of Query
             var param1 = '';    // parameter variable
             var param2 = '';
@@ -124,7 +155,7 @@ function A() {
             if(arrCode[i].indexOf(".php") != -1){
                 arrCode[i] = arrCode[i].replaceAll(".php", ".jsp");
             }
-        }
+        }*/
 
         var result = arrCode.join("~");
         result = result.replaceAll("~", "\n");
