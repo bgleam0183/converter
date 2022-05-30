@@ -59,7 +59,7 @@ function A() {
         code.replaceAll("__CA_SE__", "case");
         code.replaceAll("__ART__", "alert");
 
-        jsCode = code; 
+        document.getElementById("jspTxt").value = code;
 
         code = code.replaceAll("<", "&lt;");
         document.getElementById("jspPre").innerHTML = code;
@@ -186,8 +186,8 @@ function A() {
     }
 
     function copy() {
+        jsCode = document.getElementById("jspTxt").value;
         navigator.clipboard.writeText(jsCode);
-        
     }
 
     function phpPreonClick() {
