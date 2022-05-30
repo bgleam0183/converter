@@ -73,7 +73,25 @@ function A() {
 
         for(var i=0; i < arrCode.length; i++){
 
-            if(arrCode[i].indexOf("include") != -1){
+            if(arrCode[i].indexOf("include_once") != -1){
+                var start = arrCode[i].indexOf("include");
+                var paramS = arrCode[i].indexOf("\"", start) + 1;
+                var paramE = arrCode[i].indexOf("\"", paramS+1);
+                var param = arrCode[i].slice(paramS, paramE);
+                
+                arrCode[i] = arrCode[i].replaceAll(param, "");
+                arrCode[i] = arrCode[i].replaceAll("\"", "");
+                arrCode[i] = arrCode[i].replaceAll(");", "");
+
+                for(var j=0; j < response.length; j++){
+                    if(response[j].STRUC_PHP.indexOf("include_once") != -1){
+                        var replace = response[j].STRUC_JSP;
+                        replace = replace.replaceAll("{param1}", param);
+                        arrCode[i] = replace.replaceAll("{param2}", "true");
+                    }
+                }
+
+            } else if (arrCode[i].indexOf("include") != -1) {
                 var start = arrCode[i].indexOf("include");
                 var paramS = arrCode[i].indexOf("\"", start) + 1;
                 var paramE = arrCode[i].indexOf("\"", paramS+1);
@@ -86,15 +104,9 @@ function A() {
                 for(var j=0; j < response.length; j++){
                     if(response[j].STRUC_PHP.indexOf("include_once") != -1){
 
-                        var replace = response[j].STRUC_JSP;
-                        replace = replace.replaceAll("{param1}", param);
-                        arrCode[i] = replace.replaceAll("{param2}", "true");
-
                     } else if (response[j].STRUC_PHP.indexOf("include") != -1){
-
                         var replace = response[j].STRUC_JSP;
                         arrCode[i] = replace.replaceAll("{param1}", param);
-
                     }
                 }
             }
@@ -178,10 +190,7 @@ function A() {
                 arrCode[i] = arrCode[i].replaceAll("$", "");
             }
 
-            // Response.Write(" ");
-            if(arrCode[i].indexOf("echo") != -1){
-                arrCode[i] = arrCode[i].replaceAll("echo", "Response.Write");
-            }
+            
 
             if(arrCode[i].indexOf("exit") != -1){
                 arrCode[i] = arrCode[i].replaceAll("exit", "return");
