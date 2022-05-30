@@ -59,7 +59,7 @@ textarea::placeholder {
 }
 
 
-/* A ?ï¿½ï¿½ï¿½? css */
+/* A ?ï¿½ï¿½ï¿?? css */
 .centerContent {
     /* margin-left: -3px; */
     width: 100%;
@@ -72,6 +72,8 @@ table {
     /* width: 100%; */
     height: 100%;
     /* background-color: lightblue; */
+    table-layout:fixed;
+    word-break:break-all;
 }
 
 .leftContent {
@@ -82,10 +84,14 @@ table {
     height: 100%;
 }
 
-#phpPre {
+pre {
     margin: 0;
     overflow: auto;
-    min-height: 100px;
+    white-space: pre-wrap;
+}
+
+#phpPre {
+    max-height: 600px;
     /* height: 600px; */
     /* width: 554px; */
     height: 100%;
@@ -120,9 +126,7 @@ table {
 }
 
 #jspPre {
-    margin: 0;
-    overflow: auto;
-    min-height: 100px;
+    max-height: 600px;
     height: 100%;
     /* width: 554px; */
     border: 1px solid #F74E4E;
