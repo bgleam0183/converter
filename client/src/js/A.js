@@ -36,7 +36,7 @@ function A() {
             code = "<%!" + "\n" + dec + "\n" + "%>"; */
             await decConvert(code)
             .then(dec => {
-                code = "<%!" + "\n" + dec + "\n" + "%>";
+                code = dec;
             }).catch(err => console.log(err));
             
         } else if (gubun == "B") {
@@ -72,13 +72,41 @@ function A() {
         for(var i=0; i<arrCode.length; i++){
             var respond = '';   // result of Query
             var param1 = '';    // parameter variable
+            var param2 = '';
 
-            if(arrCode[i].indexOf("include") != -1){
+            if(arrCode[i].match("//")) {
+                continue;
+            }
+
+            if(arrCode[i].indexOf("<?") != -1 || arrCode[i].indexOf("<?php") != -1 || arrCode[i].indexOf("?>") != -1) {
+                arrCode[i] = arrCode[i].replaceAll("<?php", "<%!");
+                arrCode[i] = arrCode[i].replaceAll("<?", "<%!");
+                arrCode[i] = arrCode[i].replaceAll("?>", "%>");
+            }
+
+            if(arrCode[i].indexOf("include_once") != -1) {
+                try {
+                    // param1 => file path
+                    // param2 => flush // true or false
+                    respond = await conSelect('include_once');
+
+                    respond = respond[0].STRUC;
+
+                    var arrCodeArr = arrCode[i].split("\"");
+                    param1 = arrCodeArr[1];
+                    param2 = 'true';
+
+                    arrCode[i] = respond.replaceAll("{param1}", param1);
+                    arrCode[i] = respond.replaceAll("{param2}", param2);
+                } catch (err) {
+                    console.log(err);
+                }
+            } else if(arrCode[i].indexOf("include") != -1) {
                 //<%@ include file="/WEB-INF/views/include/header.jsp" %>
                 try {
                     respond = await conSelect('include');
 
-                    respond = respond[0].TOBE_ID;
+                    respond = respond[0].STRUC;
 
                     var arrCodeArr = arrCode[i].split("\"");
                     param1 = arrCodeArr[1];
@@ -231,6 +259,16 @@ function A() {
             response: JSON.parse(body)
         });
 
+        if( resJson.response.message == "No DB Connection" ) {
+            alert("DB Connection이 존재하지 않습니다.");
+            setResJson({
+                ...resJson,
+                response: {
+                    message: ''
+                }
+            })
+        }
+
         return JSON.parse(body);
     }
 
@@ -255,36 +293,6 @@ function A() {
 
         await response.text().then(ans => console.log(ans)).catch(err => console.log(err));
     }
-
-    /**
-     * conConnect means 'connect Connection
-     * it activate the DB Connection
-     */
-     async function conConnect() {
-        console.log("conConnect Method is Working...");
-        const result = await fetch('/c', {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-    
-        const body = await result.text();
-        console.log(body);
-      }
-
-      async function conDisConnect() {
-        console.log("conDisConnect Method is Working...");
-          const result = await fetch("/dc", {
-              method: "POST",
-              headers: {
-                  "Content-Type": "application/json",
-              },
-          });
-
-          const body = await result.text();
-          console.log(body);
-      }
 
     return (
         <div className="convertBlock">
