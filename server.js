@@ -23,13 +23,12 @@ db.autoCommit   = true;
 async function oraConnect(req, res) {
     try {
         connection = await db.getConnection(dbInfo);
+        res.send("DB is Connected");
+        console.log("db Connected")
     } catch (err) {
         console.log("DB Connect Fail");
         res.send(err);
     }
-    
-    console.log("db Connected")
-    res.send("DB is Now Connected");
 }
 
 async function oraDisConnect(req, res) {
@@ -70,16 +69,6 @@ async function oraSelect(req, res) {
         res.send({ message: "No DB Connection" });
     }
 }
-
-app.post("/c", (req, res) => {
-    console.log("Reached to Connect Activation");
-    oraConnect(req, res);
-});
-
-app.post("/dc", (req, res) => {
-    console.log("Reached to Disconnect Activation");
-    oraDisConnect(req, res);
-})
 
 
 app.post("/dbCon", (req, res) => {
