@@ -111,21 +111,21 @@ function A() {
             }
 
             if (arrCode[i].indexOf("$") != -1) {
-                var s   = arrCode[i].indexOf("$");//$ÀÇ ½ÃÀÛÀ§Ä¡
-                var ind = arrCode[i].indexOf("=", s+1);//"="ÀÇ À§Ä¡
+                var s   = arrCode[i].indexOf("$");//$ì˜ ì‹œì‘ìœ„ì¹˜
+                var ind = arrCode[i].indexOf("=", s+1);//"="ì˜ ìœ„ì¹˜
                 var v;
 
-                if (ind != -1) {//"="ÀÌ ¹®Àå¾È¿¡ ÀÖ´Â °æ¿ì
-                    v = arrCode[i].slice(s+1, ind);//º¯¼ö¸í ÃßÃâ
-                    varChk.push(v);//Àü¿ªorÁö¿ª º¯¼ö¸íÀ¸·Î ÀúÀå
+                if (ind != -1) {//"="ì´ ë¬¸ì¥ì•ˆì— ìˆëŠ” ê²½ìš°
+                    v = arrCode[i].slice(s+1, ind);//ë³€ìˆ˜ëª… ì¶”ì¶œ
+                    varChk.push(v);//ì „ì—­orì§€ì—­ ë³€ìˆ˜ëª…ìœ¼ë¡œ ì €ì¥
 
-                    arrCode[i] = arrCode[i].replaceAll("$", "var ");//Å¸ÀÔ ¼±¾ğÀ¸·Î Ä¡È¯
-                } else {//"="ÀÌ ¹®Àå¾È¿¡ ¾ø´Â °æ¿ì
+                    arrCode[i] = arrCode[i].replaceAll("$", "var ");//íƒ€ì… ì„ ì–¸ìœ¼ë¡œ ì¹˜í™˜
+                } else {//"="ì´ ë¬¸ì¥ì•ˆì— ì—†ëŠ” ê²½ìš°
 
-                    for (var j=0; j < varChk.length; j++) {//º¯¼ö°¡ ÀúÀåµÈ ¹è¿­¾È¿¡¼­ °Ë»ö
+                    for (var j=0; j < varChk.length; j++) {//ë³€ìˆ˜ê°€ ì €ì¥ëœ ë°°ì—´ì•ˆì—ì„œ ê²€ìƒ‰
                         var compare = arrCode[i].indexOf(varChk[j], s+1);
 
-                        if (compare != -1) {//¹è¿­¾È¿¡ º¯¼ö°¡ ÀÖ´Ù¸é
+                        if (compare != -1) {//ë°°ì—´ì•ˆì— ë³€ìˆ˜ê°€ ìˆë‹¤ë©´
                             arrCode[i] = arrCode[i].replaceAll("$", "");
                         }
                     }
@@ -212,9 +212,9 @@ function A() {
 
             if (arrCode[i].indexOf("//") != -1) continue;
 
-            var sub = arrCode[i].split(" ");// ´Ü¾î ´ÜÀ§·Î ºĞ¸®
+            var sub = arrCode[i].split(" ");// ë‹¨ì–´ ë‹¨ìœ„ë¡œ ë¶„ë¦¬
             
-            for (var j=0; j<sub.length; j++) {// ÅÇ ºĞ¸® ¹× Àç¹è¿­
+            for (var j=0; j<sub.length; j++) {// íƒ­ ë¶„ë¦¬ ë° ì¬ë°°ì—´
 
                 if (sub[j].indexOf("\t") != -1) {
                     var cnt = 0;
