@@ -175,17 +175,22 @@ function A() {
         for (var i=0; i<query.length; i++) {
 
             if (query[i].STRUC_PHP.indexOf("echo") != -1) {
-
-                if(conv.indexOf("echo") == -1) continue;
+                
+                if (conv.indexOf("echo") == -1) continue;
 
                 var param = query[i].STRUC_JSP;
+                param = param.replaceAll("{param}", conv.slice(conv.indexOf("\"")+1, conv.lastIndexOf("\"")));
+                
+                if (conv.indexOf("break;") != -1) {
+                    param = param + " break;";
+                }
 
-                result = conv.replaceAll("echo", param);
+                result = param;
             }
 
             if (query[i].STRUC_PHP.indexOf("exit") != -1) {
 
-                if(conv.indexOf("exit") == -1) continue;
+                if (conv.indexOf("exit") == -1) continue;
 
                 var param = query[i].STRUC_JSP;
 
@@ -199,32 +204,35 @@ function A() {
         var arrCode = code.split("\n");
         var query = await conSelect('');
 
+        var switch_flag = 0;
+
         for (var i=0; i < arrCode.length; i++) {
             var reArr = [];
 
             if (arrCode[i].indexOf("//") != -1) continue;
 
             var sub = arrCode[i].split(" ");// �ܾ� ������ �и�
-
-            for (var j=0; j<sub.length; j++) {// �� �и� �� ���?
+            
+            for (var j=0; j<sub.length; j++) {// �� �и� �� ��迭
 
                 if (sub[j].indexOf("\t") != -1) {
                     var cnt = 0;
                     var n = sub[j].indexOf("\t");
                     var ass = sub[j].split("\t");
 
-                    while (n !== -1) {
+                    while (cnt < ass.length) {
+                        if(ass[cnt] == ''){
+                            ass[cnt] = "\t";
+                        }
                         cnt++;
-                        reArr.push("\t");
-                        n = sub[j].indexOf("\t", n+1);
-                        reArr.push(ass[cnt]);
                     }
+                    reArr = reArr.concat(ass);
 
                 } else {
-                    reArr.push(sub[j]);
+                    reArr = reArr.concat(sub[j]);
                 }
             }
-            
+
             for (var j=0; j < reArr.length; j++) {
                 var result = ""
 
@@ -251,13 +259,34 @@ function A() {
                 }
 
                 if (reArr[j].indexOf("echo") != -1) {
-                    result = arr_conversion(query, reArr[j]);
+                    result = arr_conversion(query, reArr.slice(j, reArr.length).join(" "));
+
+                    for (var k=j+1; k<reArr.length; k++) {
+                        reArr[k] = "";
+                    }
+
                     reArr[j] = result;
                 }
 
                 if (reArr[j].indexOf("exit") != -1) {
                     result = arr_conversion(query, reArr[j]);
                     reArr[j] = result;
+                }
+
+                if (reArr[j].indexOf("switch") != -1 || switch_flag == 1) {
+                    switch_flag = 1;
+
+                    if (reArr[j].indexOf("<%") != -1) {
+                        reArr[j] = "%> " + reArr[j] + " <%";
+                    }
+
+                    if (reArr[j].indexOf("out.println") != -1) {
+                        //");
+                    }
+
+                    if (reArr[j].indexOf("}") != -1) {
+                        switch_flag = 0;
+                    }
                 }
             }
 
