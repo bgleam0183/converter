@@ -301,7 +301,7 @@ function A() {
                 var queS = result.indexOf("\"")+1;          // Query start
                 var queE = result.indexOf("\"", queS);      // Query end
                 
-                var query = result.substring(queS, queE);   // Pure Query
+                var queryStr = result.substring(queS, queE);   // Pure Query
     
                 var variable = [];
     
@@ -309,14 +309,14 @@ function A() {
                 var befIdx;
                 var cnt = 0;
     
-                if(query.indexOf("$") != -1) {
-                    befIdx = query.indexOf("$");
+                if(queryStr.indexOf("$") != -1) {
+                    befIdx = queryStr.indexOf("$");
                     cnt = 1;
-                    idx = query.indexOf("'", befIdx+1);
+                    idx = queryStr.indexOf("'", befIdx+1);
                     // console.log("init befIdx = "+query[befIdx+1]+"\ninit idx = "+query[idx+1]);
     
     
-                    var tmp = query.slice(befIdx, idx);
+                    var tmp = queryStr.slice(befIdx, idx);
                     tmp = tmp.replace("$", "");
                     // console.log("first tmp = "+tmp);
                     variable.push(tmp);
@@ -324,15 +324,15 @@ function A() {
                     while(befIdx != -1) {
                         cnt = cnt+1;
                         // befIdx = idx;
-                        befIdx = query.indexOf("$", idx+1);
+                        befIdx = queryStr.indexOf("$", idx+1);
                         
                         if(befIdx == -1) {
                             cnt = cnt-1;
                             break;
                         }
 
-                        idx = query.indexOf("'", befIdx+1);
-                        tmp = query.slice(befIdx, idx);
+                        idx = queryStr.indexOf("'", befIdx+1);
+                        tmp = queryStr.slice(befIdx, idx);
                         tmp = tmp.replace("$", "");
 
                         // console.log("cnt = "+cnt+"\nbefIdx = "+befIdx+"\nidx = "+idx+"\ntmp = "+tmp);
@@ -344,32 +344,32 @@ function A() {
                 if(cnt != 0) {
                     while(cnt != 0) {
                         cnt = cnt - 1;
-                        befIdx = query.indexOf("'");
-                        idx = query.indexOf("'", befIdx+1);
+                        befIdx = queryStr.indexOf("'");
+                        idx = queryStr.indexOf("'", befIdx+1);
 
-                        var varBeg = query.slice(0, befIdx)+" ";
-                        var varEnd = " "+query.slice(idx+1);
+                        var varBeg = queryStr.slice(0, befIdx)+" ";
+                        var varEnd = " "+queryStr.slice(idx+1);
 
-                        query = varBeg + "?" + varEnd;
+                        queryStr = varBeg + "?" + varEnd;
 
                         var begin = result.slice(0, queS);
                         var end = result.slice(queE);
                         
-                        result = begin + query + end;
+                        result = begin + queryStr + end;
                         
                         queE = result.indexOf("\"", queS);      // Query end refresh
                     }
                 }
 
                 idx = result.indexOf(")");
-                query = result.slice(0, idx);   // I'm just use query variable without any reason.
+                queryStr = result.slice(0, idx);   // I'm just use query variable without any reason.
 
 
                 for(var j=0; j<variable.length; j++) {
                     // 콤마 붙이는 것 때매 포문 씀 if문으로 제어할것
-                    query = query + ", " + variable[j];
+                    queryStr = queryStr + ", " + variable[j];
                 }
-                result = query + ");";
+                result = queryStr + ");";
             } // process Query Change Ended
             arrCode[i] = result;
         }
