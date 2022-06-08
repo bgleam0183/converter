@@ -142,6 +142,9 @@ function A() {
         var flag = conv.indexOf("include_once");
 
         for (var i=0; i < query.length; i++) {
+            
+            if (query[i].STRUC_PHP == undefined) continue;
+
             if (flag != -1 && query[i].STRUC_PHP.indexOf("include_once") != -1) {
 
                 var param = query[i].STRUC_JSP;
