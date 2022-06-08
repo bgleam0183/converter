@@ -208,6 +208,19 @@ function A() {
         var query = await conSelect('');
 
         var switch_flag = 0;
+        var bracket = [];
+
+        for (var i=0; i < arrCode.length; i++) { //괄호 짝맞추기 배열
+            var open = /[\{\}\[\]\(\)<>\'\"]/g;
+            
+            var match = arrCode[i].match(open);
+
+            if (arrCode[i].indexOf("//") != -1) {
+                bracket.push(null);
+            } else {
+                bracket.push(match);
+            }
+        }
 
         for (var i=0; i < arrCode.length; i++) {
             var reArr = [];
@@ -235,8 +248,8 @@ function A() {
                     reArr = reArr.concat(sub[j]);
                 }
             }
-
-            for (var j=0; j < reArr.length; j++) {
+            
+            for (var j=0; j < reArr.length; j++) {//단어별로 문법 변환
                 var result = ""
 
                 if (reArr[j].indexOf("=") != -1) {
@@ -276,6 +289,17 @@ function A() {
                     reArr[j] = result;
                 }
 
+                if (reArr[j].indexOf("trim") != -1) {
+                    var t = reArr[j].indexOf("trim");
+                    var s = reArr[j].indexOf("(", t);
+                    var e = reArr[j].indexOf(")", s);
+
+                    var r = reArr[j].slice(t, e+1);//치환할 문자열 ex) trim($msg)
+                    var u = reArr[j].slice(s+1, e) + ".trim()";//변환된 문자열 ex) $msg.trim()
+                    
+                    reArr[j] = reArr[j].replace(r, u);
+                }
+
                 if (reArr[j].indexOf("switch") != -1 || switch_flag == 1) {
                     switch_flag = 1;
 
@@ -292,7 +316,7 @@ function A() {
                     }
                 }
             }
-
+            
             arrCode[i] = reArr.join(" ");
 
             var result = arrCode[i];
@@ -381,7 +405,6 @@ function A() {
             } // process Query Change Ended
             arrCode[i] = result;
         }
-        // for(var i=0; i<3; i++) {console.log(arrCode[i]);}
 
         var result = arrCode.join("~");
         result = result.replaceAll("~", "\n");
