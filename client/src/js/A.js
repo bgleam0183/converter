@@ -110,21 +110,21 @@ function A() {
             }
 
             if (arrCode[i].indexOf("$") != -1) {
-                var s   = arrCode[i].indexOf("$");//$�� ������ġ
-                var ind = arrCode[i].indexOf("=", s+1);//"="�� ��ġ
+                var s   = arrCode[i].indexOf("$");//$의 시작위치
+                var ind = arrCode[i].indexOf("=", s+1);//"="의 위치
                 var v;
 
-                if (ind != -1) {//"="�� ����ȿ�? �ִ� ���?
-                    v = arrCode[i].slice(s+1, ind);//������ ����
-                    varChk.push(v);//����or���� ���������� ����
+                if (ind != -1) {//"="이 문장안에 있는 경우
+                    v = arrCode[i].slice(s+1, ind);//변수명 추출
+                    varChk.push(v);//전역or지역 변수명으로 저장
 
-                    arrCode[i] = arrCode[i].replaceAll("$", "var ");//Ÿ�� �������� ġȯ
-                } else {//"="�� ����ȿ�? ���� ���?
+                    arrCode[i] = arrCode[i].replaceAll("$", "var ");//타입 선언으로 치환
+                } else {//"="이 문장안에 없는 경우
 
-                    for (var j=0; j < varChk.length; j++) {//������ �����? �迭�ȿ��� �˻�
+                    for (var j=0; j < varChk.length; j++) {//변수가 저장된 배열안에서 검색
                         var compare = arrCode[i].indexOf(varChk[j], s+1);
 
-                        if (compare != -1) {//�迭�ȿ� ������ �ִٸ�
+                        if (compare != -1) {//배열안에 변수가 있다면
                             arrCode[i] = arrCode[i].replaceAll("$", "");
                         }
                     }
@@ -211,9 +211,9 @@ function A() {
 
             if (arrCode[i].indexOf("//") != -1) continue;
 
-            var sub = arrCode[i].split(" ");// �ܾ� ������ �и�
+            var sub = arrCode[i].split(" ");// 단어 단위로 분리
             
-            for (var j=0; j<sub.length; j++) {// �� �и� �� ��迭
+            for (var j=0; j<sub.length; j++) {// 탭 분리 및 재배열
 
                 if (sub[j].indexOf("\t") != -1) {
                     var cnt = 0;
