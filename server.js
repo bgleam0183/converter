@@ -62,9 +62,9 @@ async function oraSelect(req, res) {
 
         if( true ) {
             res.send(result.rows);
-        } else {
+        }/*  else {
             res.send({ message: "error_occured. Too many records loaded." });
-        }
+        } */
     } catch (err) {
         console.log(err);
         res.send({ message: "No DB Connection" });

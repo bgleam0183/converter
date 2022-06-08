@@ -115,14 +115,14 @@ function A() {
                 var ind = arrCode[i].indexOf("=", s+1);//"="�� ��ġ
                 var v;
 
-                if (ind != -1) {//"="�� ����ȿ� �ִ� ���
+                if (ind != -1) {//"="�� ����ȿ�? �ִ� ���?
                     v = arrCode[i].slice(s+1, ind);//������ ����
                     varChk.push(v);//����or���� ���������� ����
 
                     arrCode[i] = arrCode[i].replaceAll("$", "var ");//Ÿ�� �������� ġȯ
-                } else {//"="�� ����ȿ� ���� ���
+                } else {//"="�� ����ȿ�? ���� ���?
 
-                    for (var j=0; j < varChk.length; j++) {//������ ����� �迭�ȿ��� �˻�
+                    for (var j=0; j < varChk.length; j++) {//������ �����? �迭�ȿ��� �˻�
                         var compare = arrCode[i].indexOf(varChk[j], s+1);
 
                         if (compare != -1) {//�迭�ȿ� ������ �ִٸ�
@@ -207,7 +207,7 @@ function A() {
 
             var sub = arrCode[i].split(" ");// �ܾ� ������ �и�
 
-            for (var j=0; j<sub.length; j++) {// �� �и� �� ��迭
+            for (var j=0; j<sub.length; j++) {// �� �и� �� ���?
 
                 if (sub[j].indexOf("\t") != -1) {
                     var cnt = 0;
@@ -263,8 +263,86 @@ function A() {
             }
 
             arrCode[i] = reArr.join(" ");
-            // console.log(arrCode[i]);
+
+            var result = arrCode[i];
+
+            if(result.indexOf("mysql_query") != -1) {
+                var queS = result.indexOf("\"")+1;          // Query start
+                var queE = result.indexOf("\"", queS);      // Query end
+                
+                var query = result.substring(queS, queE);   // Pure Query
+    
+                var variable = [];
+    
+                var idx;
+                var befIdx;
+                var cnt = 0;
+    
+                if(query.indexOf("$") != -1) {
+                    befIdx = query.indexOf("$");
+                    cnt = 1;
+                    idx = query.indexOf("'", befIdx+1);
+                    // console.log("init befIdx = "+query[befIdx+1]+"\ninit idx = "+query[idx+1]);
+    
+    
+                    var tmp = query.slice(befIdx, idx);
+                    tmp = tmp.replace("$", "");
+                    // console.log("first tmp = "+tmp);
+                    variable.push(tmp);
+    
+                    while(befIdx != -1) {
+                        cnt = cnt+1;
+                        // befIdx = idx;
+                        befIdx = query.indexOf("$", idx+1);
+                        
+                        if(befIdx == -1) {
+                            cnt = cnt-1;
+                            break;
+                        }
+
+                        idx = query.indexOf("'", befIdx+1);
+                        tmp = query.slice(befIdx, idx);
+                        tmp = tmp.replace("$", "");
+
+                        // console.log("cnt = "+cnt+"\nbefIdx = "+befIdx+"\nidx = "+idx+"\ntmp = "+tmp);
+    
+                        variable.push(tmp);
+                    }
+                }
+    
+                if(cnt != 0) {
+                    while(cnt != 0) {
+                        cnt = cnt - 1;
+                        befIdx = query.indexOf("'");
+                        idx = query.indexOf("'", befIdx+1);
+
+                        var varBeg = query.slice(0, befIdx)+" ";
+                        var varEnd = " "+query.slice(idx+1);
+
+                        query = varBeg + "?" + varEnd;
+
+                        var begin = result.slice(0, queS);
+                        var end = result.slice(queE);
+                        
+                        result = begin + query + end;
+                        
+                        queE = result.indexOf("\"", queS);      // Query end refresh
+                    }
+                }
+
+                idx = result.indexOf(")");
+                query = result.slice(0, idx);   // I'm just use query variable without any reason.
+
+
+                for(var j=0; j<variable.length; j++) {
+                    // 콤마 붙이는 것 때매 포문 씀 if문으로 제어할것
+                    query = query + ", " + variable[j];
+                }
+                result = query + ");";
+            } // process Query Change Ended
+            arrCode[i] = result;
         }
+        // for(var i=0; i<3; i++) {console.log(arrCode[i]);}
 
         var result = arrCode.join("~");
         result = result.replaceAll("~", "\n");
@@ -352,7 +430,7 @@ function A() {
         });
 
         if( resJson.response.message == "No DB Connection" ) {
-            alert("DB Connection이 존재하지 않습니다.");
+            alert("DB Connection in not Valid yet.\nPlease Try Again.");
             setResJson({
                 ...resJson,
                 response: {
