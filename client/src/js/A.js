@@ -309,8 +309,8 @@ function A() {
                 var befIdx;
                 var cnt = 0;
     
-                if(queryStr.indexOf("$") != -1) {
-                    befIdx = queryStr.indexOf("$");
+                if(queryStr.indexOf("'$") != -1) {
+                    befIdx = queryStr.indexOf("'$")+1;
                     cnt = 1;
                     idx = queryStr.indexOf("'", befIdx+1);
                     // console.log("init befIdx = "+query[befIdx+1]+"\ninit idx = "+query[idx+1]);
@@ -318,13 +318,14 @@ function A() {
     
                     var tmp = queryStr.slice(befIdx, idx);
                     tmp = tmp.replace("$", "");
-                    // console.log("first tmp = "+tmp);
                     variable.push(tmp);
-    
+                    // console.log(queryStr);
                     while(befIdx != -1) {
                         cnt = cnt+1;
                         // befIdx = idx;
-                        befIdx = queryStr.indexOf("$", idx+1);
+                        befIdx = queryStr.indexOf("'$", idx+1);
+                        // console.log(befIdx);
+                        // console.log(queryStr[befIdx]);
                         
                         if(befIdx == -1) {
                             cnt = cnt-1;
@@ -332,8 +333,13 @@ function A() {
                         }
 
                         idx = queryStr.indexOf("'", befIdx+1);
-                        tmp = queryStr.slice(befIdx, idx);
+                        // console.log(idx);
+                        // console.log(queryStr[idx]);
+                        console.log(queryStr);
+                        tmp = queryStr.slice(befIdx+1, idx);
+                        console.log(tmp);
                         tmp = tmp.replace("$", "");
+                        // console.log("first tmp = "+tmp);
 
                         // console.log("cnt = "+cnt+"\nbefIdx = "+befIdx+"\nidx = "+idx+"\ntmp = "+tmp);
     
@@ -344,7 +350,7 @@ function A() {
                 if(cnt != 0) {
                     while(cnt != 0) {
                         cnt = cnt - 1;
-                        befIdx = queryStr.indexOf("'");
+                        befIdx = queryStr.indexOf("'$");
                         idx = queryStr.indexOf("'", befIdx+1);
 
                         var varBeg = queryStr.slice(0, befIdx)+" ";
@@ -361,15 +367,17 @@ function A() {
                     }
                 }
 
-                idx = result.indexOf(")");
+                idx = result.indexOf(")", queE);
                 queryStr = result.slice(0, idx);   // I'm just use query variable without any reason.
+                var daOpen = result.slice(idx);     // improve performence. -> when mysql_query is inside of the parentheses '('
 
 
                 for(var j=0; j<variable.length; j++) {
                     // 콤마 붙이는 것 때매 포문 씀 if문으로 제어할것
                     queryStr = queryStr + ", " + variable[j];
                 }
-                result = queryStr + ");";
+                result = queryStr + daOpen;
+                // console.log(variable);
             } // process Query Change Ended
             arrCode[i] = result;
         }
