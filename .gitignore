@@ -1,2 +1,7 @@
 /node_modules
 /dbinfo.js
+/.firebaserc
+/firebase_config.js
+/firebase.json
+/build
+
